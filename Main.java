@@ -2,82 +2,84 @@ import kareltherobot.*;
 
 public class Main implements Directions {
 
+    // Constants
+    private static final int START_STREET = 2;
+    private static final int START_AVENUE = 6;
+    private static final int START_BEEPERS = 16;
+    private static final Direction START_DIRECTION = West;
+
     public static void main(String[] args) {
         World.setVisible(true);
 
-        Robot r = new Robot(2, 6, West, 16);
-        turnRight(r);         // r.turnLeft() 3x
+        Robot r = new Robot(START_STREET, START_AVENUE, START_DIRECTION, START_BEEPERS);
 
-        // Place beepers according to original logic
-        // First row
-        r.putBeeper();
-        
-        
-        r.move();             // move to next position
+        // Turn North first
+        turnRight(r);
 
-        // Second Row         
-        r.turnLeft();
-        moveSteps(r, 1);  
-        r.putBeeper();      //left most beeper 
+        // 1st row - center beeper
+        placeSingleBeeper(r);
+        moveUpOneRow(r);
 
-        turnAround(r);     
-        moveSteps(r, 2);      //moves 2 steps to make right most beeper
-        r.putBeeper();
+        // 2nd row - 2 beepers (1 space left/right from center)
+        placeRow(r, 1);
+        moveUpOneRow(r);
 
-        turnAround(r);      
-        moveSteps(r, 1);          //moves back to center
+        // 3rd row - widest row (2 spaces left/right from center)
+        placeRow(r, 2);
+        moveUpOneRow(r);
 
-        turnRight(r);       
-        moveSteps(r, 1);
+        // 4th row - same as 2nd
+        placeRow(r, 1);
+        moveUpOneRow(r);
 
-        // Third row
-        r.turnLeft();
-        moveSteps(r, 2);        //puts left most beeper in 3rd row
-        r.putBeeper();
+        // 5th row - center beeper
+        placeSingleBeeper(r);
+    }
 
-        turnAround(r);
-        moveSteps(r, 4);        //takes 4 steps and puts right most beeper 3rd row
-        r.putBeeper();
+    // === PATTERN METHODS ===
 
-        turnAround(r);
-        moveSteps(r, 2);        //recenters 
-        
-        turnRight(r);           //faces straight up and moves
-        moveSteps(r, 1);
-
-        // Fourth row
-        r.turnLeft();        //left most beeper
-        moveSteps(r, 1);
-        r.putBeeper();
-
-        turnAround(r);
-        moveSteps(r, 2);    //right most beeper row 4
-        r.putBeeper();
-
-        turnAround(r);
-        moveSteps(r, 1);        //recenters
-
-        // Fifth Row
-        turnRight(r);       
-        moveSteps(r, 1);
+    // Center beeper only
+    public static void placeSingleBeeper(Robot r) {
         r.putBeeper();
     }
 
-    // Helper method: Turn right (3 left turns)
+    // Places symmetric beepers given distance from center to each side
+    public static void placeRow(Robot r, int distanceFromCenter) {
+        // Left beeper
+        r.turnLeft();
+        moveSteps(r, distanceFromCenter);
+        r.putBeeper();
+
+        // Right beeper
+        turnAround(r);
+        moveSteps(r, distanceFromCenter * 2);
+        r.putBeeper();
+
+        // Back to center
+        turnAround(r);
+        moveSteps(r, distanceFromCenter);
+        turnRight(r); // Face forward again
+    }
+
+    // === MOVEMENT HELPERS ===
+
+    // Move to next row above
+    public static void moveUpOneRow(Robot r) {
+        moveSteps(r, 1); // since robot is already facing North
+    }
+
     public static void turnRight(Robot r) {
         for (int i = 0; i < 3; i++) {
             r.turnLeft();
         }
     }
 
-    // Helper method: Turn around (2 left turns)
     public static void turnAround(Robot r) {
         for (int i = 0; i < 2; i++) {
             r.turnLeft();
         }
     }
 
-    // Helper method: Move n steps forward
     public static void moveSteps(Robot r, int steps) {
         for (int i = 0; i < steps; i++) {
             r.move();
