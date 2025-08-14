@@ -30,30 +30,30 @@ public class Main implements Directions {
         r.move();
 
         r.turnLeft();
-        moveSteps(r, 2);        //
+        moveSteps(r, 2);        //puts left most beeper in 3rd row
         r.putBeeper();
 
         turnAround(r);
-        moveSteps(r, 4);
+        moveSteps(r, 4);        //takes 4 steps and puts right most beeper 3rd row
         r.putBeeper();
 
         turnAround(r);
-        moveSteps(r, 2);
+        moveSteps(r, 2);        //recenters 
 
         // Fourth row
-        turnRight(r);
+        turnRight(r);           //faces straight up and moves
         r.move();
 
-        r.turnLeft();
+        r.turnLeft();        //left most beeper
         r.move();
         r.putBeeper();
 
         turnAround(r);
-        moveSteps(r, 2);
+        moveSteps(r, 2);    //right most beeper row 4
         r.putBeeper();
 
         turnAround(r);
-        r.move();
+        r.move();        //recenters
 
         // Fifth Row
         turnRight(r);
